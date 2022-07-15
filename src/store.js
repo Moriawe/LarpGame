@@ -6,7 +6,7 @@ const mutations = {
     },
   },
   state = {
-    points: "",
+    points: 0,
     characters: [
       {
         UI: 1,
