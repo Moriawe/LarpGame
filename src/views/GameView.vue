@@ -5,8 +5,10 @@ export default {
       subjects: "",
       answers: "",
       startQuiz: false,
-      currentUI: "",
+      currentUI: 0,
+      maxAmount: this.$store.state.characters.length,
       askedQuestions: [],
+      setOfAnswers: [],
     }
   },
   methods: {
@@ -14,6 +16,22 @@ export default {
       this.startQuiz = true
       console.log(this.subjects)
       console.log(this.answers)
+      //this.getAnswers()
+    },
+    getAnswers() {
+      let randomNumbers = []
+      randomNumbers.push(this.currentUI)
+      console.log(randomNumbers)
+
+      do {
+        Math.floor(Math.random() * this.maxAmount)
+      } while (randomNumbers.length < 4)
+
+      this.setOfAnswers = [
+        this.$store.state.characters[randomNumbers[0]][this.answers],
+        this.$store.state.characters[randomNumbers[1]][this.answers],
+        this.$store.state.characters[randomNumbers[2]][this.answers],
+      ]
     },
   },
   computed: {
@@ -21,7 +39,7 @@ export default {
       return Object.keys(this.$store.state.characters[0])
     },
     newQuestion() {
-      let max = this.$store.state.characters.length - 1
+      let max = this.maxAmount - 1
       let number = 0
 
       do {
@@ -31,17 +49,17 @@ export default {
       this.askedQuestions.push(number)
       console.log(number)
       console.log(this.askedQuestions)
-      this.currentUI = this.$store.state.characters[number].UI
+      this.currentUI = number
+      //this.currentUI = this.$store.state.characters[number].UI
 
       return this.$store.state.characters[number][this.subjects]
     },
     //This one is not working ATM but need to be working, safer!
     newQuestion2() {
-      let max = this.$store.state.characters.length
       let number = 0
 
       do {
-        number = Math.floor(Math.random() * max)
+        number = Math.floor(Math.random() * this.maxAmount)
       } while (this.askedQuestions.includes(number))
 
       this.askedQuestions.push(number)
@@ -53,7 +71,8 @@ export default {
 
       return 0
     },
-    showAnswers() {
+    // Trying to work with the UI instead of arrayindex
+    showAnswers2() {
       let rightAnswer = this.$store.state.characters.find(
         (x) => x.UI === this.currentUI
       )
@@ -146,7 +165,6 @@ body {
   </div>
   <div id="answers">
     <p>Answer</p>
-    <p>{{ answers }}</p>
-    <p>{{ showAnswers }}</p>
+    <p>{{ showAnswers2 }}</p>
   </div>
 </template>
